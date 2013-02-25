@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Brad Cater"]
   gem.email         = ["bradcater@gmail.com"]
   gem.description   = %q{This gem adds ActiveRecord support for partitioned has_one relations using the PostgreSQL PARTITION BY clause.}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.summary       = %q{This gem adds ActiveRecord support for partitioned has_one relations using the PostgreSQL PARTITION BY clause.}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
