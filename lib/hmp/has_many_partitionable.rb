@@ -1,6 +1,7 @@
-module ActiveRecord
-  class Base
+#module ActiveRecord
+#  class Base
     module HasManyPartitionable
+      require 'active_support'
       extend ActiveSupport::Concern
       included do
         class_eval do
@@ -44,5 +45,5 @@ module ActiveRecord
         end
       end
     end
-  end
-end
+#  end
+#end

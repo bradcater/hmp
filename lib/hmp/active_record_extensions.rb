@@ -1,3 +1,4 @@
+require 'active_support/core_ext/module/delegation'
 module ActiveRecord
   class Relation
     def to_a

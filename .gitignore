@@ -6,6 +6,7 @@
 .bundle
 .config
 .yardoc
+database.yml
 Gemfile.lock
 InstalledFiles
 _yardoc
