@@ -13,19 +13,25 @@ ActiveRecord::Base.connection.execute(%{
   DROP TABLE IF EXISTS support_tickets;
   DROP TABLE IF EXISTS customers;
   CREATE TABLE customers (
-    id          integer PRIMARY KEY DEFAULT nextval('serial'),
+    id          SERIAL,
     created_at  timestamp without time zone NOT NULL,
     updated_at  timestamp without time zone NOT NULL,
     name        text NOT NULL
   );
+  ALTER TABLE customers ADD PRIMARY KEY (id);
   CREATE TABLE support_tickets (
-    id           integer PRIMARY KEY DEFAULT nextval('serial'),
+    id           SERIAL,
     created_at   timestamp without time zone NOT NULL,
     updated_at   timestamp without time zone NOT NULL,
     customer_id  integer NOT NULL REFERENCES customers(id),
     message      text NOT NULL
   );
-  CREATE INDEX index_support_tickets_on_customer_id ON support_tickets(customer_id) CLUSTER;
+  ALTER TABLE support_tickets ADD PRIMARY KEY (id);
+  CREATE INDEX index_support_tickets_on_customer_id ON support_tickets(customer_id);
+  CLUSTER support_tickets USING index_support_tickets_on_customer_id;
+})
+ActiveRecord::Base.connection.execute(%{
+  CLUSTER;
 })
 
 # Define the models.
@@ -47,7 +53,7 @@ barney = Customer.create!(:name => 'Barney')
   SupportTicket.create!(:customer_id => barney.id, :message => msg)
 end
 
-describe Hmp::Hmp do
+describe Hmp do
   it "should get all of Barney's SupportTickets" do
     barney.support_tickets.count.should eql(2)
     barney.support_tickets.all.map(&:class).map(&:to_s).each do |st_klass|
@@ -57,6 +63,6 @@ describe Hmp::Hmp do
 
   it "should get Barney's latest SupportTicket" do
     barney.latest_support_ticket.class.to_s.should eql('SupportTicket')
-    barney.latest_support_ticket.id.should eql(barney.support_tickets.first(:order => 'id DESC'))
+    barney.latest_support_ticket.id.should eql(barney.support_tickets.first(:order => 'id DESC').id)
   end
 end
