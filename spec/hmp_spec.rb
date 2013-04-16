@@ -56,13 +56,19 @@ end
 describe Hmp do
   it "should get all of Barney's SupportTickets" do
     barney.support_tickets.count.should eql(2)
-    barney.support_tickets.all.map(&:class).map(&:to_s).each do |st_klass|
-      st_klass.should eql('SupportTicket')
+    barney.support_tickets.all.each do |st|
+      st.class.to_s.should eql('SupportTicket')
+      st.customer_id.should eql(barney.id)
     end
   end
 
   it "should get Barney's latest SupportTicket" do
     barney.latest_support_ticket.class.to_s.should eql('SupportTicket')
     barney.latest_support_ticket.id.should eql(barney.support_tickets.first(:order => 'id DESC').id)
+  end
+
+  it "should get Barney's latest SupportTicket with _fast" do
+    barney.latest_support_ticket_fast.class.to_s.should eql('SupportTicket')
+    barney.latest_support_ticket_fast.id.should eql(barney.support_tickets.first(:order => 'id DESC').id)
   end
 end
